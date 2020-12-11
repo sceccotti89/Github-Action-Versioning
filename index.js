@@ -9,9 +9,11 @@ try {
 
     const ref = github.context.ref;
     const branch = ref.substr(ref.lastIndexOf('/'));
-    console.log('Branch: ', branch);
+    console.log('Branch:', branch);
     
-    core.setOutput("version", version);
+    const finalVersion = `${branch}-${version}`;
+
+    core.setOutput("version", finalVersion);
 } catch (error) {
     core.setFailed(error.message);
 }
