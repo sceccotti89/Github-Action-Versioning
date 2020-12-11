@@ -73,8 +73,5 @@ function extractBranchNameFromRef(ref: string): string {
 function extractVersionNumber(base_ref: string): string {
     const sub_base_ref = base_ref.substr(base_ref.lastIndexOf('/') + 1);
     const groups = sub_base_ref.match(PULL_REQUEST_SOURCE_BRANCH_NAME_REGEX);
-    if (groups) {
-        return groups[1];
-    }
-    return BASE_VERSION;
+    return groups ? groups[1] : BASE_VERSION;
 }
