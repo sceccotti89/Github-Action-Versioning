@@ -29,7 +29,7 @@ export default (github: any): ProcessResult => {
 function handlePullRequest(github: any, base_ref: string): ProcessResult {
     const source_branch = extractBranchNameFromRef(base_ref);
     if (!source_branch.match(PULL_REQUEST_SOURCE_BRANCH_NAME_REGEX)) {
-        return { error: 'Invalid source branch name. Please follow the following regex for naming: ' + PULL_REQUEST_SOURCE_BRANCH_NAME_REGEX };
+        return { error: `Invalid source branch name "${source_branch}". Please follow the following regex for naming: PULL_REQUEST_SOURCE_BRANCH_NAME_REGEX` };
     } else {
         const version = extractVersionNumber(base_ref);
     
