@@ -38,7 +38,7 @@ try {
     // const payload = JSON.stringify(github.context, undefined, 2);
     // console.log(`The event payload: ${payload}`);
     //const base_ref: string = github.context.payload.base_ref;
-    const base_ref = 'release/first-1.0.0';
+    const base_ref = 'refs/heads/release/first-1.0.0';
     if (isPullRequest(base_ref)) {
         if (!base_ref.substr(base_ref.lastIndexOf('/') + 1).match(PULL_REQUEST_BRANCH_NAME_REGEX)) {
             core.setFailed('Invalid source branch name. Please follow the following regex for naming: ' + PULL_REQUEST_BRANCH_NAME_REGEX);
