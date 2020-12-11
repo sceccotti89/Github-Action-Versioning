@@ -41,33 +41,31 @@ try {
     const base_ref = 'refs/heads/release/first-1.0.0';
     if (isPullRequest(base_ref)) {
         const source_branch = extractBranchNameFromRef(base_ref);
-        console.log("SOURCE_BRANCH:", source_branch);
         if (!source_branch.match(PULL_REQUEST_BRANCH_NAME_REGEX)) {
             core.setFailed('Invalid source branch name. Please follow the following regex for naming: ' + PULL_REQUEST_BRANCH_NAME_REGEX);
         }
         else {
             const version = extractVersionNumber(base_ref);
-            console.log('VERSION:', version);
             const ref = github.context.ref;
             const sha = github.context.sha.substr(0, 8);
             let version_name;
             if (isMainBranch(ref)) {
                 version_name = `${version}`;
             }
-            else if (isReleaseBranch(ref)) {
-                const branch = ref.substr(ref.indexOf(BRANCH_REF) + 1);
-                version_name = `${branch}-${version}-${sha}`;
-            }
-            else if (isDevelopBranch(ref)) {
-                const branch = ref.substr(ref.indexOf(BRANCH_REF) + 1);
-                version_name = `${branch}-${version}-${sha}`;
-            }
-            else if (isFeatureBranch(ref)) {
-                const branch = ref.substr(ref.indexOf(BRANCH_REF) + 1);
-                version_name = `${branch}-${version}-${sha}`;
-            }
             else {
-                core.setFailed('Unrecognized branch name: ' + extractBranchNameFromRef(ref));
+                const branch = ref.substr(ref.lastIndexOf('/') + 1);
+                if (isReleaseBranch(ref)) {
+                    version_name = `${branch}-${version}-${sha}`;
+                }
+                else if (isDevelopBranch(ref)) {
+                    version_name = `${branch}-${version}-${sha}`;
+                }
+                else if (isFeatureBranch(ref)) {
+                    version_name = `${branch}-${version}-${sha}`;
+                }
+                else {
+                    core.setFailed('Unrecognized branch name: ' + extractBranchNameFromRef(ref));
+                }
             }
             if (version_name) {
                 core.setOutput("version", version_name);
@@ -103,7 +101,6 @@ function extractVersionNumber(base_ref) {
     const sub_base_ref = base_ref.substr(base_ref.lastIndexOf('/') + 1);
     const groups = sub_base_ref.match(PULL_REQUEST_BRANCH_NAME_REGEX);
     if (groups) {
-        console.log('GROUPS:', groups);
         return groups[1];
     }
     return BASE_VERSION;
