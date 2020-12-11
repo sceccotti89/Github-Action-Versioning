@@ -13,4 +13,4 @@ jobs:
         id: versioning
 
       - name: Get the output version
-        run: echo "Version: ${{ steps.versioning.outputs.version }}"
+        run: echo "Version ${{ steps.versioning.outputs.version }}"
