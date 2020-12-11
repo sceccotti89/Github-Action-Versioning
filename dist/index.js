@@ -1,56 +1,77 @@
-module.exports =
+require('./sourcemap-register.js');module.exports =
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 456:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/***/ 896:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
-const core = __webpack_require__(127);
-const github = __webpack_require__(134);
+"use strict";
 
-const BASE_VERSION = '1.0.0';
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const core = __importStar(__webpack_require__(127));
+const github = __importStar(__webpack_require__(134));
+const BASE_VERSION = '0.0.1';
 const BRANCH_REF = 'refs/heads/';
-const TAG_REF    = 'refs/tags/';
-
+const TAG_REF = 'refs/tags/';
+const PULL_REQUEST_BRANCH_NAME = /[a-zA-Z][a-zA-Z0-9_]*-\d+\.\d+\.\d+/;
 try {
     const payload = JSON.stringify(github.context, undefined, 2);
     console.log(`The event payload: ${payload}`);
-
-    console.log('NEW VERSION:', incrementPatchVersion(BASE_VERSION));
-    const version = (isPullRequest(github.context.payload)) ? incrementPatchVersion(BASE_VERSION) : BASE_VERSION ;
-
+    const version = (isPullRequest(github.context.payload)) ? incrementPatchVersion(BASE_VERSION) : BASE_VERSION;
     const ref = github.context.ref;
     const sha = github.context.sha.substr(0, 8);
     let version_name = '';
-
     if (isMainBranchOrTag(ref)) {
         version_name = `${version}`;
-    } else {
+    }
+    else {
         const branch = ref.substr(ref.indexOf(BRANCH_REF) + 1);
         version_name = `${branch}-${version}-${sha}`;
     }
-
     core.setOutput("version", version_name);
-} catch (error) {
+}
+catch (error) {
     core.setFailed(error.message);
 }
-
-function isMainBranchOrTag (ref) {
-    if (ref.startsWith(TAG_REF) || (ref.startsWith(BRANCH_REF) && ref.startsWith(`${BRANCH_REF}main`))) {
+function isMainBranchOrTag(ref) {
+    if (ref.startsWith(TAG_REF) || isMainBranch(ref)) {
         return true;
     }
     return false;
 }
-
+function isMainBranch(ref) { return ref.startsWith(`${BRANCH_REF}main`); }
+function isDevelopBranch(ref) { return ref.startsWith(`${BRANCH_REF}develop`); }
+function isReleaseBranch(ref) { return ref.startsWith(`${BRANCH_REF}release`); }
 function isPullRequest(payload) {
     return payload.base_ref != null;
 }
-
+function extractVersionNumber(base_ref) {
+}
 function incrementPatchVersion(version) {
     const sub_versions = version.split('.').map(sub_version => +sub_version);
     sub_versions[2]++;
     return sub_versions.join('.');
 }
+
 
 /***/ }),
 
@@ -5971,6 +5992,7 @@ module.exports = require("zlib");;
 /******/ 	// module exports must be returned from runtime so entry inlining is disabled
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(456);
+/******/ 	return __webpack_require__(896);
 /******/ })()
 ;
+//# sourceMappingURL=index.js.map
