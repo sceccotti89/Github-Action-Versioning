@@ -32,22 +32,36 @@ const github = __importStar(__webpack_require__(134));
 const BASE_VERSION = '0.0.1';
 const BRANCH_REF = 'refs/heads/';
 const TAG_REF = 'refs/tags/';
-const PULL_REQUEST_BRANCH_NAME = /[a-zA-Z][a-zA-Z0-9_]*-\d+\.\d+\.\d+/;
+const TAG_REF_REGEX = /\d+\.\d+\.\d+/;
+const PULL_REQUEST_BRANCH_NAME_REGEX = /[a-zA-Z][a-zA-Z0-9_]*-(\d+\.\d+\.\d+)/g;
 try {
-    const payload = JSON.stringify(github.context, undefined, 2);
-    console.log(`The event payload: ${payload}`);
-    const version = (isPullRequest(github.context.payload)) ? incrementPatchVersion(BASE_VERSION) : BASE_VERSION;
-    const ref = github.context.ref;
-    const sha = github.context.sha.substr(0, 8);
-    let version_name = '';
-    if (isMainBranchOrTag(ref)) {
-        version_name = `${version}`;
+    // const payload = JSON.stringify(github.context, undefined, 2);
+    // console.log(`The event payload: ${payload}`);
+    //const base_ref: string = github.context.payload.base_ref;
+    const base_ref = 'release/first-1.0.0';
+    if (isPullRequest(base_ref)) {
+        if (!base_ref.substr(base_ref.lastIndexOf('/') + 1).match(PULL_REQUEST_BRANCH_NAME_REGEX)) {
+            core.setFailed('Invalid source branch name. Please follow the following regex for naming: ' + PULL_REQUEST_BRANCH_NAME_REGEX);
+        }
+        else {
+            const version = extractVersionNumber(base_ref);
+            const ref = github.context.ref;
+            const sha = github.context.sha.substr(0, 8);
+            let version_name = '';
+            if (isMainBranchOrTag(ref)) {
+                version_name = `${version}`;
+            }
+            else {
+                const branch = ref.substr(ref.indexOf(BRANCH_REF) + 1);
+                version_name = `${branch}-${version}-${sha}`;
+            }
+            core.setOutput("version", version_name);
+        }
     }
     else {
-        const branch = ref.substr(ref.indexOf(BRANCH_REF) + 1);
-        version_name = `${branch}-${version}-${sha}`;
+        // TODO
+        core.setOutput("version", BASE_VERSION);
     }
-    core.setOutput("version", version_name);
 }
 catch (error) {
     core.setFailed(error.message);
@@ -58,18 +72,20 @@ function isMainBranchOrTag(ref) {
     }
     return false;
 }
+function isTag(ref) { return ref.startsWith(TAG_REF); }
 function isMainBranch(ref) { return ref.startsWith(`${BRANCH_REF}main`); }
 function isDevelopBranch(ref) { return ref.startsWith(`${BRANCH_REF}develop`); }
 function isReleaseBranch(ref) { return ref.startsWith(`${BRANCH_REF}release`); }
-function isPullRequest(payload) {
-    return payload.base_ref != null;
+function isPullRequest(base_ref) {
+    return base_ref != null;
 }
 function extractVersionNumber(base_ref) {
-}
-function incrementPatchVersion(version) {
-    const sub_versions = version.split('.').map(sub_version => +sub_version);
-    sub_versions[2]++;
-    return sub_versions.join('.');
+    const sub_base_ref = base_ref.substr(base_ref.lastIndexOf('/') + 1);
+    const groups = sub_base_ref.match(PULL_REQUEST_BRANCH_NAME_REGEX);
+    if (groups) {
+        return groups[1];
+    }
+    return BASE_VERSION;
 }
 
 
