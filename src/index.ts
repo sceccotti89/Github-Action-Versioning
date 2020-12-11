@@ -16,6 +16,7 @@ try {
     const base_ref: string = 'refs/heads/release/first-1.0.0';
     if (isPullRequest(base_ref)) {
         const source_branch = extractBranchNameFromRef(base_ref);
+        console.log("SOURCE_BRANCH:", source_branch);
         if (!source_branch.match(PULL_REQUEST_BRANCH_NAME_REGEX)) {
             core.setFailed('Invalid source branch name. Please follow the following regex for naming: ' + PULL_REQUEST_BRANCH_NAME_REGEX);
         } else {
