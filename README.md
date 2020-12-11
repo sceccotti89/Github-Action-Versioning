@@ -15,7 +15,7 @@ Add the following snippet into your workflow:
 ```
 - name: Generate Version
   id: versioning
-  uses: actions/Github-Action-Versioning@v1.0.0
+  uses: sceccotti89/Github-Action-Versioning@v1.0.0
 - name: Get the output version
   run: echo "Version = ${{ steps.versioning.outputs.version }}"
 ```
