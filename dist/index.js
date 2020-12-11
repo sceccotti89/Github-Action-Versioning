@@ -33,7 +33,7 @@ const BASE_VERSION = '0.0.1';
 const BRANCH_REF = 'refs/heads/';
 const TAG_REF = 'refs/tags/';
 const TAG_REF_REGEX = /\d+\.\d+\.\d+/;
-const PULL_REQUEST_BRANCH_NAME_REGEX = /[a-zA-Z][a-zA-Z0-9_]*-(\d+\.\d+\.\d+)/g;
+const PULL_REQUEST_BRANCH_NAME_REGEX = /[a-zA-Z][a-zA-Z0-9_]*-(\d+\.\d+\.\d+)/;
 try {
     // const payload = JSON.stringify(github.context, undefined, 2);
     // console.log(`The event payload: ${payload}`);
