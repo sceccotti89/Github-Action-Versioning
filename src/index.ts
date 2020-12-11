@@ -6,9 +6,6 @@ const BRANCH_REF = 'refs/heads/';
 const PULL_REQUEST_SOURCE_BRANCH_NAME_REGEX = /[a-zA-Z][a-zA-Z0-9_]*-(\d+\.\d+\.\d+)/;
 
 try {
-    // const payload = JSON.stringify(github.context, undefined, 2);
-    // console.log(`The event payload: ${payload}`);
-
     const base_ref: string = github.context.payload.base_ref;
     if (isPullRequest(base_ref)) {
         const source_branch = extractBranchNameFromRef(base_ref);
@@ -21,7 +18,7 @@ try {
             const sha = github.context.sha.substr(0, 8);
             let version_name;
 
-            if (isMainBranch(ref)) {
+            if (isMasterBranch(ref)) {
                 version_name = `${version}`;
             } else {
                 const branch = extractBranchNameFromRef(ref);
@@ -47,7 +44,7 @@ try {
     core.setFailed(error.message);
 }
 
-function isMainBranch(ref: string): boolean { return ref.startsWith(`${BRANCH_REF}main`); }
+function isMasterBranch(ref: string): boolean { return ref.startsWith(`${BRANCH_REF}master`); }
 function isReleaseBranch(ref: string): boolean { return ref.startsWith(`${BRANCH_REF}release`); }
 function isDevelopBranch(ref: string): boolean { return ref.startsWith(`${BRANCH_REF}develop`); }
 function isFeatureBranch(ref: string): boolean { return ref.startsWith(`${BRANCH_REF}release`); }
