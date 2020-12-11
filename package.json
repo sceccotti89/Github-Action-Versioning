@@ -1,0 +1,24 @@
+{
+  "name": "Github-Action-Versioning",
+  "version": "1.0.0",
+  "description": "Github Action to generate a version number based on the current branch.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sceccotti89/Github-Action-Versioning.git"
+  },
+  "keywords": [],
+  "author": "Stefano Ceccotti",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sceccotti89/Github-Action-Versioning/issues"
+  },
+  "homepage": "https://github.com/sceccotti89/Github-Action-Versioning#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "@actions/github": "^4.0.0"
+  }
+}

@@ -1,0 +1,9 @@
+name: 'Branch versioning'
+description: 'Create a semantic version number based on the current branch'
+inputs:
+outputs:
+  version:
+    description: 'Branch version number'
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
