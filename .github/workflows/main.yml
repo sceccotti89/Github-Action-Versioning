@@ -9,7 +9,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Versioning action step
-        uses: ./dist
+        uses: ./
         id: versioning
 
       - name: Get the output version
