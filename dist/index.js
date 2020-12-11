@@ -25,9 +25,7 @@ try {
     } else {
         const branch = ref.substr(ref.indexOf(BRANCH_REF) + 1);
         version_name = `${branch}-${version}-${sha}`;
-    } 
-
-
+    }
     
     const finalVersion = `${branch}-${version}-${sha}`;
 
@@ -36,7 +34,7 @@ try {
     core.setFailed(error.message);
 }
 
-const isMainBranchOrTag = (ref) => {
+function isMainBranchOrTag (ref) {
     if (ref.startsWith(TAG_REF) || (ref.startsWith(BRANCH_REF) && ref.startsWith(`${BRANCH_REF}main`))) {
         return true;
     }
