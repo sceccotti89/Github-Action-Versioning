@@ -28,7 +28,7 @@ try {
             if (isMainBranch(ref)) {
                 version_name = `${version}`;
             } else {
-                const branch = ref.substr(ref.lastIndexOf('/') + 1);
+                const branch = extractBranchNameFromRef(ref);
                 if (isReleaseBranch(ref)) {
                     version_name = `${branch}-${version}-${sha}`;
                 } else if (isDevelopBranch(ref)) {
@@ -36,7 +36,7 @@ try {
                 } else if (isFeatureBranch(ref)) {
                     version_name = `${branch}-${version}-${sha}`;
                 } else {
-                    core.setFailed('Unrecognized branch name: ' + extractBranchNameFromRef(ref) );
+                    core.setFailed('Unrecognized branch name: ' + branch);
                 }
             }
         
