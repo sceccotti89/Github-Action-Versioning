@@ -58,7 +58,7 @@ test('Pull request into branch different from master', () => {
     });
 });
 
-test('Invalid base_ref pull request', () => {
+test('Invalid source branch on pull request', () => {
     const github: github = {
         context: {
             payload: {
@@ -73,7 +73,7 @@ test('Invalid base_ref pull request', () => {
     });
 });
 
-test('Invalid base_ref pull request', () => {
+test('Invalid destination branch on pull request', () => {
     const github: github = {
         context: {
             payload: {
