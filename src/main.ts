@@ -7,16 +7,16 @@ export type ProcessResult = { version?: string; error?: string | Error };
 
 export default (github: any): ProcessResult => {
     try {
-        const base_ref: string = github.context.payload.base_ref;
-        if (isPullRequest(base_ref)) {
+        if (isPullRequest(github.context.payload.pull_request)) {
+            const base_ref: string = github.context.payload.base_ref;
             return handlePullRequest(github, base_ref);
         } else {
             // PUSH
             const ref = github.context.ref;
+            const branch = extractBranchNameFromRef(ref);
             if (isTag(ref)) {
-                return { version: extractBranchNameFromRef(ref) };
+                return { version: branch };
             } else {
-                const branch = extractBranchNameFromRef(ref);
                 const sha = github.context.sha.substr(0, 8);
                 return { version: `${branch}-${sha}` };
             }
@@ -52,8 +52,8 @@ function handlePullRequest(github: any, base_ref: string): ProcessResult {
     }
 }
 
-function isPullRequest(base_ref: string): boolean {
-    return base_ref != null;
+function isPullRequest(pull_request: any): boolean {
+    return pull_request != null;
 }
 
 function isTag(ref: string): boolean { return ref.startsWith(TAG_REF) }

@@ -33,6 +33,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__webpack_require__(186));
 const github = __importStar(__webpack_require__(438));
 const main_1 = __importDefault(__webpack_require__(109));
+console.log('PR:', github.context.payload.pull_request);
 const result = main_1.default(github);
 if (result.error) {
     core.setFailed(result.error);
@@ -56,18 +57,18 @@ const BRANCH_REF = 'refs/heads/';
 const PULL_REQUEST_SOURCE_BRANCH_NAME_REGEX = /[a-zA-Z][a-zA-Z0-9_]*-(\d+\.\d+\.\d+)/;
 exports.default = (github) => {
     try {
-        const base_ref = github.context.payload.base_ref;
-        if (isPullRequest(base_ref)) {
+        if (isPullRequest(github.context.payload.pull_request)) {
+            const base_ref = github.context.payload.base_ref;
             return handlePullRequest(github, base_ref);
         }
         else {
             // PUSH
             const ref = github.context.ref;
+            const branch = extractBranchNameFromRef(ref);
             if (isTag(ref)) {
-                return { version: extractBranchNameFromRef(ref) };
+                return { version: branch };
             }
             else {
-                const branch = extractBranchNameFromRef(ref);
                 const sha = github.context.sha.substr(0, 8);
                 return { version: `${branch}-${sha}` };
             }
@@ -102,8 +103,8 @@ function handlePullRequest(github, base_ref) {
         return { version: version_name };
     }
 }
-function isPullRequest(base_ref) {
-    return base_ref != null;
+function isPullRequest(pull_request) {
+    return pull_request != null;
 }
 function isTag(ref) { return ref.startsWith(TAG_REF); }
 function isMasterBranch(ref) { return ref.startsWith(`${BRANCH_REF}master`); }
