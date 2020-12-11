@@ -2,8 +2,8 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 
 const version = '1.0.0';
-const BRANCH_REF = 'ref/heads/';
-const TAG_REF    = 'ref/tags/';
+const BRANCH_REF = 'refs/heads/';
+const TAG_REF    = 'refs/tags/';
 
 try {
     const payload = JSON.stringify(github.context, undefined, 2);
