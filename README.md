@@ -1,21 +1,21 @@
 # Semantic versioning action
 
-This action prints "Hello World" or "Hello" + the name of a person to greet to the log.
-
-## Inputs
-
-### `who-to-greet`
-
-**Required** The name of the person to greet. Default `"World"`.
+This action generates a semantic versioning number based on the current branch and type of operation.
 
 ## Outputs
 
-### `time`
+### `version`
 
-The time we greeted you.
+The generated version.
 
 ## Example usage
 
-uses: actions/hello-world-javascript-action@v1.1
-with:
-  who-to-greet: 'Mona the Octocat'
+Add the following snippet into your workflow:
+
+```
+- name: Generate Version
+  id: versioning
+  uses: actions/Github-Action-Versioning@v1.0.0
+- name: Get the output version
+  run: echo "Version = ${{ steps.versioning.outputs.version }}"
+```
