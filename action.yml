@@ -1,6 +1,5 @@
 name: 'Branch versioning'
 description: 'Create a semantic version number based on the current branch'
-inputs:
 outputs:
   version:
     description: 'Branch version number'
