@@ -45,6 +45,7 @@ try {
         }
         else {
             const version = extractVersionNumber(base_ref);
+            console.log('VERSION:', version);
             const ref = github.context.ref;
             const sha = github.context.sha.substr(0, 8);
             let version_name = '';

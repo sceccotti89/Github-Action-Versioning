@@ -19,6 +19,7 @@ try {
             core.setFailed('Invalid source branch name. Please follow the following regex for naming: ' + PULL_REQUEST_BRANCH_NAME_REGEX);
         } else {
             const version = extractVersionNumber(base_ref);
+            console.log('VERSION:', version);
         
             const ref = github.context.ref;
             const sha = github.context.sha.substr(0, 8);
