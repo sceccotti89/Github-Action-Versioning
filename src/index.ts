@@ -53,7 +53,7 @@ try {
     core.setFailed(error.message);
 }
 
-function isMainBranchOrTag(ref: string) {
+function isMainBranchOrTag(ref: string): boolean {
     if (ref.startsWith(TAG_REF) || isMainBranch(ref)) {
         return true;
     }
@@ -61,12 +61,12 @@ function isMainBranchOrTag(ref: string) {
 }
 
 function isTag(ref: string) { return ref.startsWith(TAG_REF); }
-function isMainBranch(ref: string) { return ref.startsWith(`${BRANCH_REF}main`); }
-function isReleaseBranch(ref: string) { return ref.startsWith(`${BRANCH_REF}release`); }
-function isDevelopBranch(ref: string) { return ref.startsWith(`${BRANCH_REF}develop`); }
-function isFeatureBranch(ref: string) { return ref.startsWith(`${BRANCH_REF}release`); }
+function isMainBranch(ref: string): boolean { return ref.startsWith(`${BRANCH_REF}main`); }
+function isReleaseBranch(ref: string): boolean { return ref.startsWith(`${BRANCH_REF}release`); }
+function isDevelopBranch(ref: string): boolean { return ref.startsWith(`${BRANCH_REF}develop`); }
+function isFeatureBranch(ref: string): boolean { return ref.startsWith(`${BRANCH_REF}release`); }
 
-function isPullRequest(base_ref: string) {
+function isPullRequest(base_ref: string): boolean {
     return base_ref != null;
 }
 
