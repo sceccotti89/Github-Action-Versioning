@@ -22,7 +22,7 @@ try {
                 version_name = `${version}`;
             } else {
                 const branch = extractBranchNameFromRef(ref);
-                if (isReleaseBranch(ref) || isDevelopBranch(ref) || isFeatureBranch(ref)) {
+                if (isReleaseBranch(ref) || isDevelopBranch(ref) || isFeatureBranch(ref) || isHotfixBranch(ref)) {
                     version_name = `${branch}-${version}-${sha}`;
                 } else {
                     core.setFailed('Unrecognized branch name: ' + branch);
@@ -34,6 +34,7 @@ try {
             }
         }
     } else {
+        // PUSH
         const ref = github.context.ref;
         const branch = extractBranchNameFromRef(ref);
         const sha = github.context.sha.substr(0, 8);
@@ -47,7 +48,8 @@ try {
 function isMasterBranch(ref: string): boolean { return ref.startsWith(`${BRANCH_REF}master`); }
 function isReleaseBranch(ref: string): boolean { return ref.startsWith(`${BRANCH_REF}release`); }
 function isDevelopBranch(ref: string): boolean { return ref.startsWith(`${BRANCH_REF}develop`); }
-function isFeatureBranch(ref: string): boolean { return ref.startsWith(`${BRANCH_REF}release`); }
+function isFeatureBranch(ref: string): boolean { return ref.startsWith(`${BRANCH_REF}feature`); }
+function isHotfixBranch(ref: string): boolean { return ref.startsWith(`${BRANCH_REF}hotfix`); }
 
 function isPullRequest(base_ref: string): boolean {
     return base_ref != null;

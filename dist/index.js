@@ -49,7 +49,7 @@ try {
             }
             else {
                 const branch = extractBranchNameFromRef(ref);
-                if (isReleaseBranch(ref) || isDevelopBranch(ref) || isFeatureBranch(ref)) {
+                if (isReleaseBranch(ref) || isDevelopBranch(ref) || isFeatureBranch(ref) || isHotfixBranch(ref)) {
                     version_name = `${branch}-${version}-${sha}`;
                 }
                 else {
@@ -62,6 +62,7 @@ try {
         }
     }
     else {
+        // PUSH
         const ref = github.context.ref;
         const branch = extractBranchNameFromRef(ref);
         const sha = github.context.sha.substr(0, 8);
@@ -74,7 +75,8 @@ catch (error) {
 function isMasterBranch(ref) { return ref.startsWith(`${BRANCH_REF}master`); }
 function isReleaseBranch(ref) { return ref.startsWith(`${BRANCH_REF}release`); }
 function isDevelopBranch(ref) { return ref.startsWith(`${BRANCH_REF}develop`); }
-function isFeatureBranch(ref) { return ref.startsWith(`${BRANCH_REF}release`); }
+function isFeatureBranch(ref) { return ref.startsWith(`${BRANCH_REF}feature`); }
+function isHotfixBranch(ref) { return ref.startsWith(`${BRANCH_REF}hotfix`); }
 function isPullRequest(base_ref) {
     return base_ref != null;
 }
