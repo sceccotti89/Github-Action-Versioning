@@ -1,6 +1,6 @@
 # Semantic versioning action
 
-This action generates a semantic versioning number based on the current branch and type of operation.
+This action generates a semantic versioning number based on the current branch and type of operation (push or pull_request).
 
 ## Outputs
 
