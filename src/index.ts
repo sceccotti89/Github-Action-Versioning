@@ -29,11 +29,7 @@ try {
                 version_name = `${version}`;
             } else {
                 const branch = extractBranchNameFromRef(ref);
-                if (isReleaseBranch(ref)) {
-                    version_name = `${branch}-${version}-${sha}`;
-                } else if (isDevelopBranch(ref)) {
-                    version_name = `${branch}-${version}-${sha}`;
-                } else if (isFeatureBranch(ref)) {
+                if (isReleaseBranch(ref) || isDevelopBranch(ref) || isFeatureBranch(ref)) {
                     version_name = `${branch}-${version}-${sha}`;
                 } else {
                     core.setFailed('Unrecognized branch name: ' + branch);
