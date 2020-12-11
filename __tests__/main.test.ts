@@ -1,6 +1,6 @@
 import process from './../src/main';
 
-type github = { context: { payload: { base_ref?: string; }, ref: string; sha: string; } };
+type github = { context: { payload: { pull_request?: { head: { ref: string; } }; }, ref: string; sha: string; } };
 
 test('push branch', () => {
     const github: github = {
@@ -32,7 +32,11 @@ test('Pull request into master branch', () => {
     const github: github = {
         context: {
             payload: {
-                base_ref: 'refs/heads/release/first-1.0.1'
+                pull_request: {
+                    head: {
+                        ref: 'release/first-1.0.1'
+                    }
+                }
             },
             ref: 'refs/heads/master',
             sha: '955e639d'
@@ -47,7 +51,11 @@ test('Pull request into branch different from master', () => {
     const github: github = {
         context: {
             payload: {
-                base_ref: 'refs/heads/release/first-1.0.1'
+                pull_request: {
+                    head: {
+                        ref: 'release/first-1.0.1'
+                    }
+                }
             },
             ref: 'refs/heads/develop',
             sha: '955e639d'
@@ -62,7 +70,11 @@ test('Invalid source branch on pull request', () => {
     const github: github = {
         context: {
             payload: {
-                base_ref: 'refs/heads/invalid'
+                pull_request: {
+                    head: {
+                        ref: 'invalid'
+                    }
+                }
             },
             ref: 'refs/heads/master',
             sha: '955e639d'
@@ -77,7 +89,11 @@ test('Invalid destination branch on pull request', () => {
     const github: github = {
         context: {
             payload: {
-                base_ref: 'refs/heads/release/first-1.0.1'
+                pull_request: {
+                    head: {
+                        ref: 'release/first-1.0.1'
+                    }
+                }
             },
             ref: 'refs/heads/invalid',
             sha: '955e639d'

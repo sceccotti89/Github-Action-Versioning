@@ -8,7 +8,7 @@ export type ProcessResult = { version?: string; error?: string | Error };
 export default (github: any): ProcessResult => {
     try {
         if (isPullRequest(github.context.payload.pull_request)) {
-            const base_ref: string = github.context.payload.base_ref;
+            const base_ref: string = github.context.payload.pull_request.head.ref;
             return handlePullRequest(github, base_ref);
         } else {
             // PUSH
@@ -26,12 +26,11 @@ export default (github: any): ProcessResult => {
     }
 };
 
-function handlePullRequest(github: any, base_ref: string): ProcessResult {
-    const source_branch = extractBranchNameFromRef(base_ref);
+function handlePullRequest(github: any, source_branch: string): ProcessResult {
     if (!source_branch.match(PULL_REQUEST_SOURCE_BRANCH_NAME_REGEX)) {
         return { error: `Invalid source branch name "${source_branch}". Please follow the following regex for naming: ${PULL_REQUEST_SOURCE_BRANCH_NAME_REGEX}` };
     } else {
-        const version = extractVersionNumber(base_ref);
+        const version = extractVersionNumber(source_branch);
     
         const ref: string = github.context.ref;
         const sha: string = github.context.sha.substr(0, 8);
@@ -68,8 +67,7 @@ function extractBranchNameFromRef(ref: string): string {
     return ref.substr(ref.lastIndexOf('/') + 1);
 }
 
-function extractVersionNumber(base_ref: string): string {
-    const sub_base_ref = base_ref.substr(base_ref.lastIndexOf('/') + 1);
-    const groups = sub_base_ref.match(PULL_REQUEST_SOURCE_BRANCH_NAME_REGEX);
+function extractVersionNumber(source_branch: string): string {
+    const groups = source_branch.match(PULL_REQUEST_SOURCE_BRANCH_NAME_REGEX);
     return groups ? groups[1] : BASE_VERSION;
 }
