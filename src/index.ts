@@ -2,6 +2,7 @@ import * as core from '@actions/core';
 import * as github from '@actions/github';
 
 const BASE_VERSION = '0.0.1';
+const TAG_REF = 'refs/tags/';
 const BRANCH_REF = 'refs/heads/';
 const PULL_REQUEST_SOURCE_BRANCH_NAME_REGEX = /[a-zA-Z][a-zA-Z0-9_]*-(\d+\.\d+\.\d+)/;
 
@@ -36,14 +37,21 @@ try {
     } else {
         // PUSH
         const ref = github.context.ref;
-        const branch = extractBranchNameFromRef(ref);
-        const sha = github.context.sha.substr(0, 8);
-        core.setOutput("version", `${branch}-${sha}`);
+        console.log('REF:', ref);
+        if (isTag(ref)) {
+            core.setOutput("version", extractBranchNameFromRef(ref));
+        } else {
+            const branch = extractBranchNameFromRef(ref);
+            const sha = github.context.sha.substr(0, 8);
+            core.setOutput("version", `${branch}-${sha}`);
+        }
     }
 
 } catch (error) {
     core.setFailed(error.message);
 }
+
+function isTag(ref: string): boolean { return ref.startsWith(TAG_REF) }
 
 function isMasterBranch(ref: string): boolean { return ref.startsWith(`${BRANCH_REF}master`); }
 function isReleaseBranch(ref: string): boolean { return ref.startsWith(`${BRANCH_REF}release`); }
