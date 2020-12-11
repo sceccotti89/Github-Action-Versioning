@@ -4,12 +4,12 @@ const github = require('@actions/github');
 const version = '1.0.0';
 
 try {
-    console.log('Ref:', github.context.ref);
-    
     //const payload = JSON.stringify(github.context.payload, undefined, 2);
     //console.log(`The event payload: ${payload}`);
 
-    console.log('Branch: ', github.context.payload.ref);
+    const ref = github.context.ref;
+    const branch = ref.substr(ref.lastIndexOf('/'));
+    console.log('Branch: ', branch);
     
     core.setOutput("version", version);
 } catch (error) {
