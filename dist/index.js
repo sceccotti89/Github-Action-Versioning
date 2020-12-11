@@ -18,7 +18,7 @@ try {
     const branch = ref.substr(ref.lastIndexOf('/') + 1);
     console.log('Branch:', branch);
 
-    const sha = github.context.sha;
+    const sha = github.context.sha.substr(0, 8);
     
     const finalVersion = `${branch}-${version}-${sha}`;
 
