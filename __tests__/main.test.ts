@@ -69,7 +69,7 @@ test('Invalid source branch on pull request', () => {
         }
     };
     expect(process(github)).toStrictEqual({
-        error: 'Invalid source branch name. Please follow the following regex for naming: /[a-zA-Z][a-zA-Z0-9_]*-(\\d+\\.\\d+\\.\\d+)/'
+        error: 'Invalid source branch name "invalid". Please follow the following regex for naming: /[a-zA-Z][a-zA-Z0-9_]*-(\\d+\\.\\d+\\.\\d+)/'
     });
 });
 
