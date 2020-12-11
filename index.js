@@ -10,8 +10,10 @@ try {
     const ref = github.context.ref;
     const branch = ref.substr(ref.lastIndexOf('/') + 1);
     console.log('Branch:', branch);
+
+    const sha = github.context.sha;
     
-    const finalVersion = `${branch}-${version}`;
+    const finalVersion = `${branch}-${version}-${sha}`;
 
     core.setOutput("version", finalVersion);
 } catch (error) {
