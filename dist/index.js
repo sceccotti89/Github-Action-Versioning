@@ -16,6 +16,7 @@ try {
     const payload = JSON.stringify(github.context, undefined, 2);
     console.log(`The event payload: ${payload}`);
 
+    console.log('NEW VERSION:', incrementPatchVersion(BASE_VERSION));
     const version = (isPullRequest(github.context.payload)) ? incrementPatchVersion(BASE_VERSION) : BASE_VERSION ;
 
     const ref = github.context.ref;
