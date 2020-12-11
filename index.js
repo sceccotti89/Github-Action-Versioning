@@ -8,7 +8,7 @@ try {
     //console.log(`The event payload: ${payload}`);
 
     const ref = github.context.ref;
-    const branch = ref.substr(ref.lastIndexOf('/'));
+    const branch = ref.substr(ref.lastIndexOf('/') + 1);
     console.log('Branch:', branch);
     
     const finalVersion = `${branch}-${version}`;
