@@ -33,7 +33,7 @@ const BASE_VERSION = '0.0.1';
 const BRANCH_REF = 'refs/heads/';
 const TAG_REF = 'refs/tags/';
 const TAG_REF_REGEX = /\d+\.\d+\.\d+/;
-const PULL_REQUEST_BRANCH_NAME_REGEX = /[a-zA-Z][a-zA-Z0-9_]*-(\d+\.\d+\.\d+)/;
+const PULL_REQUEST_SOURCE_BRANCH_NAME_REGEX = /[a-zA-Z][a-zA-Z0-9_]*-(\d+\.\d+\.\d+)/;
 try {
     // const payload = JSON.stringify(github.context, undefined, 2);
     // console.log(`The event payload: ${payload}`);
@@ -41,8 +41,8 @@ try {
     const base_ref = 'refs/heads/release/first-1.0.0';
     if (isPullRequest(base_ref)) {
         const source_branch = extractBranchNameFromRef(base_ref);
-        if (!source_branch.match(PULL_REQUEST_BRANCH_NAME_REGEX)) {
-            core.setFailed('Invalid source branch name. Please follow the following regex for naming: ' + PULL_REQUEST_BRANCH_NAME_REGEX);
+        if (!source_branch.match(PULL_REQUEST_SOURCE_BRANCH_NAME_REGEX)) {
+            core.setFailed('Invalid source branch name. Please follow the following regex for naming: ' + PULL_REQUEST_SOURCE_BRANCH_NAME_REGEX);
         }
         else {
             const version = extractVersionNumber(base_ref);
@@ -93,7 +93,7 @@ function extractBranchNameFromRef(ref) {
 }
 function extractVersionNumber(base_ref) {
     const sub_base_ref = base_ref.substr(base_ref.lastIndexOf('/') + 1);
-    const groups = sub_base_ref.match(PULL_REQUEST_BRANCH_NAME_REGEX);
+    const groups = sub_base_ref.match(PULL_REQUEST_SOURCE_BRANCH_NAME_REGEX);
     if (groups) {
         return groups[1];
     }
