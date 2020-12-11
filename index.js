@@ -11,7 +11,7 @@ try {
 
     console.log('Branch: ', github.context.payload.ref);
     
-    core.setOutput("version", '1.0.0');
+    core.setOutput("version", version);
 } catch (error) {
     core.setFailed(error.message);
 }

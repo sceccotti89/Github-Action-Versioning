@@ -8,16 +8,19 @@ module.exports =
 const core = __webpack_require__(127);
 const github = __webpack_require__(134);
 
+const version = '1.0.0';
+
 try {
-  // `who-to-greet` input defined in action metadata file
-  const nameToGreet = core.getInput('who-to-greet');
-  console.log(`Hello ${nameToGreet}!`);
-  core.setOutput("version", '1.0.0');
-  // Get the JSON webhook payload for the event that triggered the workflow
-  const payload = JSON.stringify(github.context.payload, undefined, 2);
-  console.log(`The event payload: ${payload}`);
+    console.log('Ref:', github.context.ref);
+    
+    //const payload = JSON.stringify(github.context.payload, undefined, 2);
+    //console.log(`The event payload: ${payload}`);
+
+    console.log('Branch: ', github.context.payload.ref);
+    
+    core.setOutput("version", version);
 } catch (error) {
-  core.setFailed(error.message);
+    core.setFailed(error.message);
 }
 
 /***/ }),
