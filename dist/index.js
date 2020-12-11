@@ -8,13 +8,15 @@ module.exports =
 const core = __webpack_require__(127);
 const github = __webpack_require__(134);
 
-const version = '1.0.0';
+const BASE_VERSION = '1.0.0';
 const BRANCH_REF = 'refs/heads/';
 const TAG_REF    = 'refs/tags/';
 
 try {
     const payload = JSON.stringify(github.context, undefined, 2);
     console.log(`The event payload: ${payload}`);
+
+    const version = (isPullRequest(github.context.payload)) ? incrementPatchVersion(BASE_VERSION) : BASE_VERSION ;
 
     const ref = github.context.ref;
     const sha = github.context.sha.substr(0, 8);
@@ -37,6 +39,16 @@ function isMainBranchOrTag (ref) {
         return true;
     }
     return false;
+}
+
+function isPullRequest(payload) {
+    return payload.base_ref != null;
+}
+
+function incrementPatchVersion(version) {
+    const sub_versions = version.split('.').map(sub_version => +sub_version);
+    sub_versions[2]++;
+    return sub_versions.join('.');
 }
 
 /***/ }),
