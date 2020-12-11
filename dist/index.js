@@ -31,14 +31,11 @@ const core = __importStar(__webpack_require__(127));
 const github = __importStar(__webpack_require__(134));
 const BASE_VERSION = '0.0.1';
 const BRANCH_REF = 'refs/heads/';
-const TAG_REF = 'refs/tags/';
-const TAG_REF_REGEX = /\d+\.\d+\.\d+/;
 const PULL_REQUEST_SOURCE_BRANCH_NAME_REGEX = /[a-zA-Z][a-zA-Z0-9_]*-(\d+\.\d+\.\d+)/;
 try {
     // const payload = JSON.stringify(github.context, undefined, 2);
     // console.log(`The event payload: ${payload}`);
-    //const base_ref: string = github.context.payload.base_ref;
-    const base_ref = 'refs/heads/release/first-1.0.0';
+    const base_ref = github.context.payload.base_ref;
     if (isPullRequest(base_ref)) {
         const source_branch = extractBranchNameFromRef(base_ref);
         if (!source_branch.match(PULL_REQUEST_SOURCE_BRANCH_NAME_REGEX)) {
@@ -62,25 +59,20 @@ try {
                 }
             }
             if (version_name) {
-                core.setOutput("version", version_name);
+                core.setOutput('version', version_name);
             }
         }
     }
     else {
-        // TODO
-        core.setOutput("version", BASE_VERSION);
+        const ref = github.context.ref;
+        const branch = extractBranchNameFromRef(ref);
+        const sha = github.context.sha.substr(0, 8);
+        core.setOutput("version", `${branch}-${sha}`);
     }
 }
 catch (error) {
     core.setFailed(error.message);
 }
-function isMainBranchOrTag(ref) {
-    if (ref.startsWith(TAG_REF) || isMainBranch(ref)) {
-        return true;
-    }
-    return false;
-}
-function isTag(ref) { return ref.startsWith(TAG_REF); }
 function isMainBranch(ref) { return ref.startsWith(`${BRANCH_REF}main`); }
 function isReleaseBranch(ref) { return ref.startsWith(`${BRANCH_REF}release`); }
 function isDevelopBranch(ref) { return ref.startsWith(`${BRANCH_REF}develop`); }
