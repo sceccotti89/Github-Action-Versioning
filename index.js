@@ -19,10 +19,8 @@ try {
         const branch = ref.substr(ref.indexOf(BRANCH_REF) + 1);
         version_name = `${branch}-${version}-${sha}`;
     }
-    
-    const finalVersion = `${branch}-${version}-${sha}`;
 
-    core.setOutput("version", finalVersion);
+    core.setOutput("version", version_name);
 } catch (error) {
     core.setFailed(error.message);
 }
