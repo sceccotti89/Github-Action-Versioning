@@ -32,7 +32,7 @@ function handlePullRequest(github: any, source_branch: string, default_branch: s
     } else {
         const version = extractVersionNumber(source_branch);
     
-        const ref: string = github.context.ref;
+        const ref: string = github.context.payload.pull_request.base.ref;
         const sha: string = github.context.sha.substr(0, 8);
         let version_name: string;
 

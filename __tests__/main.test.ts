@@ -1,6 +1,6 @@
 import process from './../src/main';
 
-type github = { context: { payload: { pull_request?: { head: { ref: string; } }; }, ref: string; sha: string; } };
+type github = { context: { payload: { pull_request?: { base: { ref: string; }; head: { ref: string; } }; }, ref: string; sha: string; } };
 const DEFAULT_BRANCH = 'master';
 
 test('push branch', () => {
@@ -34,12 +34,15 @@ test('Pull request into default branch', () => {
         context: {
             payload: {
                 pull_request: {
+                    base: {
+                        ref: 'refs/heads/master'
+                    },
                     head: {
                         ref: 'release/first-1.0.1'
                     }
                 }
             },
-            ref: 'refs/heads/master',
+            ref: '',
             sha: '955e639d'
         }
     };
@@ -53,12 +56,15 @@ test('Pull request into custom default branch', () => {
         context: {
             payload: {
                 pull_request: {
+                    base: {
+                        ref: 'refs/heads/main'
+                    },
                     head: {
                         ref: 'release/first-1.0.1'
                     }
                 }
             },
-            ref: 'refs/heads/main',
+            ref: '',
             sha: '955e639d'
         }
     };
@@ -72,12 +78,15 @@ test('Pull request into branch different from master', () => {
         context: {
             payload: {
                 pull_request: {
+                    base: {
+                        ref: 'refs/heads/develop'
+                    },
                     head: {
                         ref: 'release/first-1.0.1'
                     }
                 }
             },
-            ref: 'refs/heads/develop',
+            ref: '',
             sha: '955e639d'
         }
     };
@@ -91,12 +100,15 @@ test('Invalid source branch on pull request', () => {
         context: {
             payload: {
                 pull_request: {
+                    base: {
+                        ref: 'refs/heads/master'
+                    },
                     head: {
                         ref: 'invalid'
                     }
                 }
             },
-            ref: 'refs/heads/master',
+            ref: '',
             sha: '955e639d'
         }
     };
