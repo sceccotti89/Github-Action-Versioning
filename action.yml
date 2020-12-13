@@ -1,5 +1,10 @@
 name: 'Branch versioning'
 description: 'Create a semantic version number based on the current branch'
+inputs:
+  default-branch:
+    description: 'Default branch name. By default it is defined as master.'
+    required: false
+    default: 'master'
 outputs:
   version:
     description: 'Branch version number'
