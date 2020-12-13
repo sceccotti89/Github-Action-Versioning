@@ -34,7 +34,7 @@ const core = __importStar(__webpack_require__(186));
 const github = __importStar(__webpack_require__(438));
 const main_1 = __importDefault(__webpack_require__(109));
 const DEFAULT_BRANCH = 'master';
-console.log('PR: ', github.context.payload.pull_request);
+console.log('PR: ', github.context.ref);
 const default_branch = core.getInput('default-branch') || DEFAULT_BRANCH;
 const result = main_1.default(github, default_branch);
 if (result.error) {
