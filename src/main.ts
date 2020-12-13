@@ -3,7 +3,7 @@ const TAG_REF = 'refs/tags/';
 const BRANCH_REF = 'refs/heads/';
 const PULL_REQUEST_SOURCE_BRANCH_NAME_REGEX = /[a-zA-Z][a-zA-Z0-9_]*-(\d+\.\d+\.\d+)/;
 
-export type ProcessResult = { version?: string; error?: string | Error };
+export type ProcessResult = { version?: string; warning?: string; error?: string | Error };
 
 export default (github: any, default_branch: string): ProcessResult => {
     try {
@@ -28,7 +28,7 @@ export default (github: any, default_branch: string): ProcessResult => {
 
 function handlePullRequest(github: any, source_branch: string, default_branch: string): ProcessResult {
     if (!source_branch.match(PULL_REQUEST_SOURCE_BRANCH_NAME_REGEX)) {
-        return { error: `Invalid source branch name "${source_branch}". Please follow the following regex for naming: ${PULL_REQUEST_SOURCE_BRANCH_NAME_REGEX}` };
+        return { version: '', warning: `Invalid source branch name "${source_branch}". Please follow the following regex for naming: ${PULL_REQUEST_SOURCE_BRANCH_NAME_REGEX}` };
     } else {
         const version = extractVersionNumber(source_branch);
     
