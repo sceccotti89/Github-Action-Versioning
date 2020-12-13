@@ -39,6 +39,9 @@ const result = main_1.default(github, default_branch);
 if (result.error) {
     core.setFailed(result.error);
 }
+else if (result.warning) {
+    core.warning(result.warning);
+}
 else {
     core.setOutput('version', result.version);
 }
@@ -81,7 +84,7 @@ exports.default = (github, default_branch) => {
 };
 function handlePullRequest(github, source_branch, default_branch) {
     if (!source_branch.match(PULL_REQUEST_SOURCE_BRANCH_NAME_REGEX)) {
-        return { error: `Invalid source branch name "${source_branch}". Please follow the following regex for naming: ${PULL_REQUEST_SOURCE_BRANCH_NAME_REGEX}` };
+        return { version: '', warning: `Invalid source branch name "${source_branch}". Please follow the following regex for naming: ${PULL_REQUEST_SOURCE_BRANCH_NAME_REGEX}` };
     }
     else {
         const version = extractVersionNumber(source_branch);
