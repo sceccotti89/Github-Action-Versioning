@@ -89,7 +89,7 @@ function handlePullRequest(github, source_branch, default_branch) {
     }
     else {
         const version = extractVersionNumber(source_branch);
-        const ref = github.context.ref;
+        const ref = github.context.payload.pull_request.base.ref;
         const sha = github.context.sha.substr(0, 8);
         let version_name;
         if (isDefaultBranch(ref, default_branch)) {
