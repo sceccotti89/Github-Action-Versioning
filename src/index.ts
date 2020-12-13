@@ -4,7 +4,6 @@ import process, { ProcessResult } from './main'
 
 const DEFAULT_BRANCH = 'master';
 
-console.log('PR: ', github.context.ref);
 const default_branch = core.getInput('default-branch') || DEFAULT_BRANCH;
 const result: ProcessResult = process(github, default_branch);
 if (result.error) {
