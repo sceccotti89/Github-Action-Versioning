@@ -31,7 +31,7 @@ Add the following snippet into your workflow:
 If the source branch follows this structure:
 
 ```
-<source-branch>-<semver-number>-<sha>
+<source-branch>-<semver-number>
 ```
 
 then the resulting version would be:
