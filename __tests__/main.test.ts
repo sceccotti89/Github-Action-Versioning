@@ -1,9 +1,8 @@
 import process from './../src/main';
 
 type github = { context: { payload: { pull_request?: { base: { ref: string; }; head: { ref: string; } }; }, ref: string; sha: string; } };
-const DEFAULT_BRANCH = 'master';
 
-test('push branch', () => {
+test('Push Branch', () => {
     const github: github = {
         context: {
             payload: {},
@@ -11,12 +10,12 @@ test('push branch', () => {
             sha: '955e639d'
         }
     };
-    expect(process(github, DEFAULT_BRANCH)).toStrictEqual({
+    expect(process(github)).toStrictEqual({
         version: 'develop-955e639d'
     });
 });
 
-test('push tag', () => {
+test('Push Tag', () => {
     const github: github = {
         context: {
             payload: {},
@@ -24,56 +23,12 @@ test('push tag', () => {
             sha: '955e639d'
         }
     };
-    expect(process(github, DEFAULT_BRANCH)).toStrictEqual({
+    expect(process(github)).toStrictEqual({
         version: '1.0.0'
     });
 });
 
-test('Pull request into default branch', () => {
-    const github: github = {
-        context: {
-            payload: {
-                pull_request: {
-                    base: {
-                        ref: 'refs/heads/master'
-                    },
-                    head: {
-                        ref: 'release/first-1.0.1'
-                    }
-                }
-            },
-            ref: '',
-            sha: '955e639d'
-        }
-    };
-    expect(process(github, DEFAULT_BRANCH)).toStrictEqual({
-        version: '1.0.1'
-    });
-});
-
-test('Pull request into custom default branch', () => {
-    const github: github = {
-        context: {
-            payload: {
-                pull_request: {
-                    base: {
-                        ref: 'refs/heads/main'
-                    },
-                    head: {
-                        ref: 'release/first-1.0.1'
-                    }
-                }
-            },
-            ref: '',
-            sha: '955e639d'
-        }
-    };
-    expect(process(github, 'main')).toStrictEqual({
-        version: '1.0.1'
-    });
-});
-
-test('Pull request into branch different from master', () => {
+test('Pull Request', () => {
     const github: github = {
         context: {
             payload: {
@@ -86,34 +41,11 @@ test('Pull request into branch different from master', () => {
                     }
                 }
             },
-            ref: '',
+            ref: null,
             sha: '955e639d'
         }
     };
-    expect(process(github, DEFAULT_BRANCH)).toStrictEqual({
+    expect(process(github)).toStrictEqual({
         version: 'develop-1.0.1-955e639d'
-    });
-});
-
-test('Invalid source branch on pull request', () => {
-    const github: github = {
-        context: {
-            payload: {
-                pull_request: {
-                    base: {
-                        ref: 'refs/heads/master'
-                    },
-                    head: {
-                        ref: 'invalid'
-                    }
-                }
-            },
-            ref: '',
-            sha: '955e639d'
-        }
-    };
-    expect(process(github, DEFAULT_BRANCH)).toStrictEqual({
-        version: '',
-        warning: 'Invalid source branch name "invalid". Please follow the following regex for naming: /[a-zA-Z][a-zA-Z0-9_]*-(\\d+\\.\\d+\\.\\d+)/'
     });
 });

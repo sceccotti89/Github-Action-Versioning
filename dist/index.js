@@ -34,13 +34,9 @@ const core = __importStar(__webpack_require__(186));
 const github = __importStar(__webpack_require__(438));
 const main_1 = __importDefault(__webpack_require__(109));
 const DEFAULT_BRANCH = 'master';
-const default_branch = core.getInput('default-branch') || DEFAULT_BRANCH;
-const result = main_1.default(github, default_branch);
+const result = main_1.default(github);
 if (result.error) {
     core.setFailed(result.error);
-}
-else if (result.warning) {
-    core.warning(result.warning);
 }
 else {
     core.setOutput('version', result.version);
@@ -57,13 +53,12 @@ else {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const BASE_VERSION = '0.0.1';
 const TAG_REF = 'refs/tags/';
-const BRANCH_REF = 'refs/heads/';
 const PULL_REQUEST_SOURCE_BRANCH_NAME_REGEX = /[a-zA-Z][a-zA-Z0-9_]*-(\d+\.\d+\.\d+)/;
-exports.default = (github, default_branch) => {
+exports.default = (github) => {
     try {
         if (isPullRequest(github.context.payload.pull_request)) {
             const base_ref = github.context.payload.pull_request.head.ref;
-            return handlePullRequest(github, base_ref, default_branch);
+            return handlePullRequest(github, base_ref);
         }
         else {
             // PUSH operation.
@@ -82,22 +77,17 @@ exports.default = (github, default_branch) => {
         return { error: error.message };
     }
 };
-function handlePullRequest(github, source_branch, default_branch) {
+function handlePullRequest(github, source_branch) {
+    const ref = github.context.payload.pull_request.base.ref;
+    const branch = extractBranchNameFromRef(ref);
+    const sha = github.context.sha;
     if (!source_branch.match(PULL_REQUEST_SOURCE_BRANCH_NAME_REGEX)) {
-        return { version: '', warning: `Invalid source branch name "${source_branch}". Please follow the following regex for naming: ${PULL_REQUEST_SOURCE_BRANCH_NAME_REGEX}` };
+        const version_name = `${branch}-${sha}`;
+        return { version: version_name };
     }
     else {
         const version = extractVersionNumber(source_branch);
-        const ref = github.context.payload.pull_request.base.ref;
-        const sha = github.context.sha.substr(0, 8);
-        let version_name;
-        if (isDefaultBranch(ref, default_branch)) {
-            version_name = `${version}`;
-        }
-        else {
-            const branch = extractBranchNameFromRef(ref);
-            version_name = `${branch}-${version}-${sha}`;
-        }
+        const version_name = `${branch}-${version}-${sha}`;
         return { version: version_name };
     }
 }
@@ -105,7 +95,7 @@ function isPullRequest(pull_request) {
     return pull_request != null;
 }
 function isTag(ref) { return ref.startsWith(TAG_REF); }
-function isDefaultBranch(ref, default_branch) { return ref === `${BRANCH_REF}${default_branch}`; }
+// function isDefaultBranch(ref: string, default_branch: string): boolean { return ref === `${BRANCH_REF}${default_branch}`; }
 // function isReleaseBranch(ref: string): boolean { return ref.startsWith(`${BRANCH_REF}release`); }
 // function isDevelopBranch(ref: string): boolean { return ref.startsWith(`${BRANCH_REF}develop`); }
 // function isFeatureBranch(ref: string): boolean { return ref.startsWith(`${BRANCH_REF}feature`); }

@@ -2,22 +2,6 @@
 
 This action generates a semantic versioning number based on the current branch and type of operation (push or pull_request).
 
-## Inputs
-
-```
-default-branch
-```
-
-The default branch name. It's not required, and when not defined it's default value is *master*.
-
-## Outputs
-
-```
-version
-```
-
-The generated version.
-
 ## Example usage
 
 Add the following snippet into your workflow:
@@ -25,7 +9,39 @@ Add the following snippet into your workflow:
 ```
 - name: Generate Version
   id: versioning
-  uses: sceccotti89/Github-Action-Versioning@v1.0.4
+  uses: sceccotti89/Github-Action-Versioning@v1.0.5
 - name: Get the output version
   run: echo "Version = ${{ steps.versioning.outputs.version }}"
+```
+
+- Push Operation
+
+```
+<branch>-<sha>
+```
+
+- Tagging
+
+```
+<source-branch>-<tag>-<sha>
+```
+
+- Pull Request
+
+If the source branch follows this structure:
+
+```
+<source-branch>-<semver-number>-<sha>
+```
+
+then the resulting version would be:
+
+```
+<destination-branch>-<semver-number>-<sha>
+```
+
+otherwise:
+
+```
+<destination-branch>-<sha>
 ```
