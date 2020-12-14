@@ -68,7 +68,7 @@ exports.default = (github) => {
                 return { version: branch };
             }
             else {
-                const sha = github.context.sha.substr(0, 8);
+                const sha = github.context.sha.substr(0, 11);
                 return { version: `${branch}-${sha}` };
             }
         }
@@ -80,7 +80,7 @@ exports.default = (github) => {
 function handlePullRequest(github, source_branch) {
     const ref = github.context.payload.pull_request.base.ref;
     const branch = extractBranchNameFromRef(ref);
-    const sha = github.context.sha;
+    const sha = github.context.sha.substr(0, 11);
     if (!source_branch.match(PULL_REQUEST_SOURCE_BRANCH_NAME_REGEX)) {
         const version_name = `${branch}-${sha}`;
         return { version: version_name };

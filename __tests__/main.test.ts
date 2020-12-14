@@ -7,11 +7,11 @@ test('Push Branch', () => {
         context: {
             payload: {},
             ref: 'refs/heads/develop',
-            sha: '955e639d'
+            sha: 'e763c514eb8ebd6f5967139aea9ad0dbd373dace'
         }
     };
     expect(process(github)).toStrictEqual({
-        version: 'develop-955e639d'
+        version: 'develop-e763c514eb8'
     });
 });
 
@@ -20,7 +20,7 @@ test('Push Tag', () => {
         context: {
             payload: {},
             ref: 'refs/tags/1.0.0',
-            sha: '955e639d'
+            sha: 'e763c514eb8ebd6f5967139aea9ad0dbd373dace'
         }
     };
     expect(process(github)).toStrictEqual({
@@ -42,10 +42,10 @@ test('Pull Request', () => {
                 }
             },
             ref: null,
-            sha: '955e639d'
+            sha: 'e763c514eb8ebd6f5967139aea9ad0dbd373dace'
         }
     };
     expect(process(github)).toStrictEqual({
-        version: 'develop-1.0.1-955e639d'
+        version: 'develop-1.0.1-e763c514eb8'
     });
 });

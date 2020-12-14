@@ -14,34 +14,10 @@ Add the following snippet into your workflow:
   run: echo "Version = ${{ steps.versioning.outputs.version }}"
 ```
 
-- Push Operation
+### Output
 
-```
-<branch>-<sha>
-```
-
-- Tagging
-
-```
-<source-branch>-<tag>-<sha>
-```
-
-- Pull Request
-
-If the source branch follows this structure:
-
-```
-<source-branch>-<semver-number>-<sha>
-```
-
-then the resulting version would be:
-
-```
-<destination-branch>-<semver-number>-<sha>
-```
-
-otherwise:
-
-```
-<destination-branch>-<sha>
-```
+|  Operation   | Branch | Output |
+| ------------ | ------ | ------ |
+| Push         | any    | \<branch\>-\<sha\> |
+| Tag          | any    | \<branch\>-\<tag\> |
+| Pull Request | <ul><li>\<source-branch\>-\<semver-number\></li><li>otherwise</li></ul> | <ul><li>\<destination-branch\>-\<semver-number\>-\<sha\></li><li>\<destination-branch\>-\<sha\></li></ul> |

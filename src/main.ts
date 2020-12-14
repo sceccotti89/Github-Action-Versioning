@@ -16,7 +16,7 @@ export default (github: any): ProcessResult => {
             if (isTag(ref)) {
                 return { version: branch };
             } else {
-                const sha = github.context.sha.substr(0, 8);
+                const sha = github.context.sha.substr(0, 11);
                 return { version: `${branch}-${sha}` };
             }
         }
@@ -28,7 +28,7 @@ export default (github: any): ProcessResult => {
 function handlePullRequest(github: any, source_branch: string): ProcessResult {
     const ref: string = github.context.payload.pull_request.base.ref;
     const branch = extractBranchNameFromRef(ref);
-    const sha: string = github.context.sha;
+    const sha: string = github.context.sha.substr(0, 11);
 
     if (!source_branch.match(PULL_REQUEST_SOURCE_BRANCH_NAME_REGEX)) {
         const version_name = `${branch}-${sha}`;
